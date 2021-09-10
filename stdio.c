@@ -21,6 +21,15 @@ int a_putchar(int c)
 }
 
 
+#undef putchar
+int putchar(int c)
+{
+  char out = c & 0xff;
+  return write(1, &out, 1);
+  return c;
+}
+
+
 #define PAD_RIGHT 1
 #define PAD_ZERO 2
 

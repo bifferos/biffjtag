@@ -1,20 +1,25 @@
 
-
 .PHONY: clean release
 
 
-TOOL_PREFIX:=/home/biff/buildroot/buildroot-2011.11/output/host/usr/bin/i486-unknown-linux-uclibc
+CC_PATH:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/bin/gcc
+OBJCOPY:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/bin/objcopy
+INCLUDE1:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/sysroot/usr/include
+INCLUDE2:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/sysroot/usr/include/linux
+INCLUDE3:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/lib/gcc/i486-unknown-linux-uclibc/4.3.6/include
 
-RELEASE=../release/
+
+RELEASE=release/
 
 all: at-biffjtag
 
-CC = $(TOOL_PREFIX)-gcc -c -Wall -s -nostdlib
+CC = $(CC_PATH) -c -Wall -s -nostdlib -I$(INCLUDE1) -I$(INCLUDE3)
+LINK = $(CC_PATH) -Wall -s -nostdlib -I$(INCLUDE1) -I$(INCLUDE3)
 OBJS = start.o fcntl.o jtag.o at-biffjtag.o string.o stdio.o rdc.o
 
 at-biffjtag: $(OBJS) 
-	$(TOOL_PREFIX)-gcc -o at-biffjtag.elf -Wall -s -nostdlib $(OBJS)
-	objcopy -R .comment at-biffjtag.elf at-biffjtag
+	$(LINK) -o at-biffjtag.elf -Wall -s -nostdlib $(OBJS)
+	$(OBJCOPY) -R .comment at-biffjtag.elf at-biffjtag
 
 start.o: start.S
 	nasm -f elf start.S
