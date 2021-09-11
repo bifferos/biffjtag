@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import struct, os, time, sys, gen
+import gen
 
 # Get the machine code.    
 gen.Exec("""
@@ -10,6 +10,7 @@ gen.Exec("""
        mov eax, 0x87ff0600   # bit 16 == FRR 1 (E0000->FFFFF)
        out dx, eax
        """)
+
 
 #gen.Exec("""
 #       mov ax, 0x42   # bus control

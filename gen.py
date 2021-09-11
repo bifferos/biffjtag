@@ -30,6 +30,3 @@ def Exec(script):
         out = "".join([ "\\x%02x" % ord(i) for i in raw ])
         print 'if (ret==0)'
         print '  ret = RunCode((unsigned char*)"%s", %d);' % (out, len(raw))
-
-
-

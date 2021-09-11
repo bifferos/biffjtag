@@ -8,6 +8,9 @@ INCLUDE1:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-lin
 INCLUDE2:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/sysroot/usr/include/linux
 INCLUDE3:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/lib/gcc/i486-unknown-linux-uclibc/4.3.6/include
 
+TOOLS_PATH:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/bin
+CC1_PATH:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/libexec/gcc/i486-unknown-linux-uclibc/4.3.6
+export PATH := $(CC1_PATH):$(TOOLS_PATH):$(PATH)
 
 RELEASE=release/
 
