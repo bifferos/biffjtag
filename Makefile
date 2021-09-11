@@ -1,15 +1,16 @@
 
 .PHONY: clean release
 
+CROSS:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr
 
-CC_PATH:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/bin/gcc
-OBJCOPY:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/bin/objcopy
-INCLUDE1:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/sysroot/usr/include
-INCLUDE2:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/sysroot/usr/include/linux
-INCLUDE3:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/lib/gcc/i486-unknown-linux-uclibc/4.3.6/include
+CC_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin/gcc
+OBJCOPY:=$(CROSS)/i486-unknown-linux-uclibc/bin/objcopy
+INCLUDE1:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/include
+INCLUDE2:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/include/linux
+INCLUDE3:=$(CROSS)/lib/gcc/i486-unknown-linux-uclibc/4.3.6/include
 
-TOOLS_PATH:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/bin
-CC1_PATH:=$(HOME)/bifferboard/buildroot-2011.11/output/host/usr/libexec/gcc/i486-unknown-linux-uclibc/4.3.6
+TOOLS_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin
+CC1_PATH:=$(CROSS)/libexec/gcc/i486-unknown-linux-uclibc/4.3.6
 export PATH := $(CC1_PATH):$(TOOLS_PATH):$(PATH)
 
 RELEASE=release/
@@ -42,11 +43,14 @@ string.o: string.c
 stdio.o: stdio.c
 	$(CC) stdio.c
 
-rdc.o: rdc.c f_bus_control.inc
+rdc.o: rdc.c bus_control.h
 	$(CC) rdc.c
 
-f_bus_control.inc: bus_control.py
-	./bus_control.py > $@
+bus_control.h: bus_control.bin
+	xxd -i $< > $@
+
+bus_control.bin: rdc_assemble.py bus_control.S
+	./rdc_assemble.py bus_control.S $@
 
 release:
 	cp at-biffjtag $(RELEASE)	

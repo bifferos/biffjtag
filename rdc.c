@@ -293,7 +293,6 @@ unsigned long rdc_eax()
 }
 
 
-
 //  unsigned long eax = rdc_eax();
 //  printf("eax before : %x\n", eax);
 //  ret = RunCode((unsigned char*)"\xb8\x42\x00\x90", 4);
@@ -301,11 +300,30 @@ unsigned long rdc_eax()
 //  printf("eax: %x\n", eax);
 
 
+// example bus_control.h
+// unsigned char bus_control_bin[] = {};
+// unsigned int bus_control_bin_len = 38;
+#include "bus_control.h"
+
+
 int rdc_bus_control()
 {
+  unsigned char length;
+  unsigned char* ptr = bus_control_bin;
+  unsigned char* end_ptr = bus_control_bin + bus_control_bin_len;
   int ret = 0;
-#include "f_bus_control.inc"
-  return ret;
+  while (ptr < end_ptr)
+  {
+    length = *ptr;
+    ptr++;
+    ret = RunCode(ptr, length);
+    if (ret)
+    {
+      return ret;
+    }
+    ptr += length;
+  }
+  return 0;
 }
 
 
