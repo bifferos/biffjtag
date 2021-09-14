@@ -14,7 +14,6 @@ int Help()
 {
   printf("\n");
   printf("Alien-Tech BiffJTAG.  Copyright (c) Bifferos.com 2010, bifferos@yahoo.co.uk\n");
-  printf("Redistribution prohibited, all rights reserved.\n");
   printf("\n");
   printf("Program to or dump from Bifferboard bootloader flash.\n");
   printf("Usage: at-biffjtag program SOURCE_FILE\n");

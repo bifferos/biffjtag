@@ -8,9 +8,23 @@
     you pad using NOPs to a 32-bit boundary.  That's what this script does.  It generates the padded
     sets of instructions.
 
+    Example:
+        Assembler:
+            mov dx, 0xcf8
+        Binary:
+            ba f8 0c
+        RDC JTAG only accepts queued instructions in multiples of 4 bytes, so we must pad this.  We pad with nop (0x90).
+            ba f8 0c 90
+        But we prefix a 'header' to indicate the length.
+            04 ba f8 0c 90
+        In practise the length will be 4 or 8 bytes.  Could be 12 for some instructions.
+        The output of this program would be run through xxd to convert to a form suitable for inclusion in a C program,
+        or the binary data could be loaded by a C program to execute a series of instructions, looping through reading
+        the header, and then the 4,8, or 12 bytes of instruction data.
+
 """
 
-import os
+
 import sys
 import struct
 import tempfile

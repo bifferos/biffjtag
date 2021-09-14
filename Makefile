@@ -41,7 +41,7 @@ jtag.o: jtag.S
 at-biffjtag.o: at-biffjtag.c
 	$(CC) at-biffjtag.c
 
-rdc.o: rdc.c bus_control.h
+rdc.o: rdc.c
 	$(CC) rdc.c
 
 bus_control.h: bus_control.bin
