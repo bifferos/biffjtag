@@ -3,6 +3,7 @@
 
 CROSS:=/home/biff/buildroot-2011.11/output/host/usr
 
+AS_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin/as
 CC_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin/gcc
 OBJCOPY:=$(CROSS)/i486-unknown-linux-uclibc/bin/objcopy
 INCLUDE1:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/include
@@ -35,7 +36,7 @@ at-biffjtag: $(OBJS)
 	$(LINK) -o at-biffjtag -Wall $(OBJS)
 
 jtag.o: jtag.S
-	nasm -f elf jtag.S
+	$(AS_PATH) -o jtag.o jtag.S
 
 at-biffjtag.o: at-biffjtag.c
 	$(CC) at-biffjtag.c
