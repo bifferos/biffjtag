@@ -13,11 +13,11 @@
 int Help()
 {
   printf("\n");
-  printf("Alien-Tech BiffJTAG.  Copyright (c) Bifferos.com 2010, bifferos@yahoo.co.uk\n");
+  printf("BiffJTAG.  Copyright (c) Bifferos.com 2021, bifferos@yahoo.co.uk\n");
   printf("\n");
   printf("Program to or dump from Bifferboard bootloader flash.\n");
-  printf("Usage: at-biffjtag program SOURCE_FILE\n");
-  printf("  or:  at-biffjtag dump DEST_FILE\n");
+  printf("Usage: biffjtag program SOURCE_FILE\n");
+  printf("  or:  biffjtag dump DEST_FILE\n");
   return 0;
 }
 

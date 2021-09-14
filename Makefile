@@ -25,21 +25,20 @@ export PATH := $(CC1_PATH):$(TOOLS_PATH):$(PATH)
 
 RELEASE=release/
 
-all: at-biffjtag
-
+all: biffjtag
 
 CC = $(CC_PATH) -c -Wall -static -I$(INCLUDE1) -I$(INCLUDE3)
 LINK = $(CC_PATH) -Wall -static -L$(LIB1) -L$(LIB4)  -L$(LIB2) -L$(LIB3)
-OBJS = jtag.o at-biffjtag.o rdc.o
+OBJS = jtag.o biffjtag.o rdc.o
 
-at-biffjtag: $(OBJS) 
-	$(LINK) -o at-biffjtag -Wall $(OBJS)
+biffjtag: $(OBJS)
+	$(LINK) -o biffjtag -Wall $(OBJS)
 
 jtag.o: jtag.S
 	$(AS_PATH) -o jtag.o jtag.S
 
-at-biffjtag.o: at-biffjtag.c
-	$(CC) at-biffjtag.c
+biffjtag.o: biffjtag.c
+	$(CC) biffjtag.c
 
 rdc.o: rdc.c
 	$(CC) rdc.c
@@ -50,9 +49,5 @@ bus_control.h: bus_control.bin
 bus_control.bin: rdc_assemble.py bus_control.S
 	./rdc_assemble.py bus_control.S $@
 
-release:
-	cp at-biffjtag $(RELEASE)	
-
 clean:
-	rm -Rf *.o *~ at-biffjtag *.inc *.bin *.pyc *.elf assembly assembly.S
-
+	rm -Rf *.o *~ biffjtag *.inc *.bin *.pyc *.elf
