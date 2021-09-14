@@ -1,10 +1,10 @@
  
- This JTAG software is copyright (c) 2014 Bifferos.com.
+ This JTAG software is copyright (c) 2021 Bifferos.com.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
- of this Bootloader to deal in the Bootloader without restriction, including
+ of this software to deal in the software without restriction, including
  the rights to copy, publish, distribute sublicense, and/or sell copies of the
- Bootloader and to permit persons to whom the Bootloader is furnished to do so,
+ software and to permit persons to whom the software is furnished to do so,
  subject to the following conditions:
 
  THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
