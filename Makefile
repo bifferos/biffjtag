@@ -1,41 +1,30 @@
 
 .PHONY: clean release
 
-CROSS:=/home/biff/buildroot-2011.11/output/host/usr
 
-AS_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin/as
-CC_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin/gcc
-OBJCOPY:=$(CROSS)/i486-unknown-linux-uclibc/bin/objcopy
-INCLUDE1:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/include
-INCLUDE2:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/include/linux
-INCLUDE3:=$(CROSS)/lib/gcc/i486-unknown-linux-uclibc/4.3.6/include
+CROSS_PATH:=/home/biff/buildroot-2011.11/output/host/usr/bin
+PREFIX:=i486-unknown-linux-uclibc-
 
-LIB1:=$(CROSS)/i486-unknown-linux-uclibc/sysroot
-LIB2:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/lib
-LIB3:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/lib
-LIB4:=$(CROSS)/lib/gcc/i486-unknown-linux-uclibc/4.3.6
-
-CRT:=$(CROSS)/i486-unknown-linux-uclibc/sysroot/usr/lib/crti.o
-
-SYSROOT:=/home/biff/buildroot-2011.11/output/host/usr/i486-unknown-linux-uclibc/sysroot
-
-TOOLS_PATH:=$(CROSS)/i486-unknown-linux-uclibc/bin
-CC1_PATH:=$(CROSS)/libexec/gcc/i486-unknown-linux-uclibc/4.3.6
-export PATH := $(CC1_PATH):$(TOOLS_PATH):$(PATH)
+export PATH := $(CROSS_PATH):$(PATH)
 
 RELEASE=release/
 
 all: biffjtag
 
-CC = $(CC_PATH) -c -Wall -static -I$(INCLUDE1) -I$(INCLUDE3)
-LINK = $(CC_PATH) -Wall -static -L$(LIB1) -L$(LIB4)  -L$(LIB2) -L$(LIB3)
+CC = $(PREFIX)gcc -c -Wall -static 
+AS = $(PREFIX)as
+LINK = $(PREFIX)gcc -Wall -static
 OBJS = jtag.o biffjtag.o rdc.o
+
+
+flash: biffjtag
+	./upload.py
 
 biffjtag: $(OBJS)
 	$(LINK) -o biffjtag -Wall $(OBJS)
 
 jtag.o: jtag.S
-	$(AS_PATH) -o jtag.o jtag.S
+	$(AS) -o jtag.o jtag.S
 
 biffjtag.o: biffjtag.c
 	$(CC) biffjtag.c
