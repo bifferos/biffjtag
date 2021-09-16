@@ -1,6 +1,6 @@
 *.o
 *.elf
 *~
-at-biffjtag
+biffjtag
 *.bin
 bus_control.h
