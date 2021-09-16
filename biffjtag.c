@@ -1,13 +1,33 @@
 
+//usage:#define biffjtag_trivial_usage
+//usage:       "[program|dump] FILE"
+//usage:#define biffjtag_full_usage "\n\n"
+//usage:       "Program or dump bootloader from Bifferboard\n"
+//usage:#define biffjtag_example_usage
+//usage:       "# biffjtag program biffboot.bin\n"
+
+
+
+#ifdef BIFFJTAG_STANDALONE    // i.e. not part of busybox
+
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/io.h>
 #include <fcntl.h>
 
+#else
+
+#include "libbb.h"
+
+#endif
+
 #include "rdc.h"
+
+
+
+
+
 
 
 static int Help(void)
@@ -233,7 +253,12 @@ static unsigned int Manufacturer(void)
 }
 
 
+#ifdef BIFFJTAG_STANDALONE
 int main(int argc, char** argv)
+#else
+int biffjtag_main(int argc, char** argv) MAIN_EXTERNALLY_VISIBLE;
+int biffjtag_main(int argc, char** argv)
+#endif
 {
   unsigned long base;
 

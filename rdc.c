@@ -1,16 +1,28 @@
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#ifdef BIFFJTAG_STANDALONE    // i.e. not part of busybox
+
 #include <stdio.h>
-#include <getopt.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <ctype.h>
 #include <string.h>
+
+
+#else
+
+#include "libbb.h"
+
+#endif
 
 #include <sys/io.h>
 #include "jtag.h"
 #include "rdc.h"
+
+
+
+
+
+
+
+
 
 
 

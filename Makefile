@@ -13,7 +13,7 @@ RELEASE=release/
 
 all: biffjtag
 
-CC = $(PREFIX)gcc -c -Wall -static -O2 -Wstrict-prototypes
+CC = $(PREFIX)gcc -c -Wall -static -O2 -Wstrict-prototypes -DBIFFJTAG_STANDALONE
 AS = $(PREFIX)as
 LINK = $(PREFIX)gcc -Wall -static
 OBJS = jtag.o biffjtag.o rdc.o
