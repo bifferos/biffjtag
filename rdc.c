@@ -36,7 +36,7 @@
 
 
 
-int rdc_init()
+int rdc_init(void)
 {
   unsigned long ready=0;
   unsigned long tmp;
@@ -72,7 +72,7 @@ int rdc_init()
 
 
 
-unsigned long rdc_Detect()
+unsigned long rdc_Detect(void)
 {
   int ret = 0;
   jtag_WriteMem16(0xffffaaaa, 0xaaaa);
@@ -128,19 +128,6 @@ void rdc_EonSectorErase(unsigned long addr)
   }
 }
 
-
-
-static void EonDeviceErase(void)
-{
-    unsigned long sector[] = { 0x0000, 0x4000, 0x6000, 0x8000,
-           0x10000,0x20000,0x30000,0x40000,0x50000,0x60000,0x70000,0x80000,
-           0x90000,0xa0000,0xb0000,0xc0000,0xd0000,0xe0000,0xf0000 };
-    unsigned int i;
-    for (i=0;i<(sizeof(sector)/sizeof(sector[0]));i++)
-    {
-      rdc_EonSectorErase(0xfff00000+sector[i]);
-    }
-}
 
 
 int rdc_EonProgram(unsigned long addr, unsigned short value)
@@ -219,7 +206,7 @@ static void WriteData(unsigned char command, unsigned char* data, size_t data_le
 }
 
 
-void ResetFlags(void)
+static void ResetFlags(void)
 {
   struct _bits {
     unsigned long val1;
@@ -232,8 +219,8 @@ void ResetFlags(void)
   WriteData(0x0d, (unsigned char*)&tosend, sizeof(tosend) );
 }
 
-
-void ReadFlags(void)
+/*
+static void ReadFlags(void)
 {
   struct _bits {
     unsigned long val1;
@@ -251,10 +238,10 @@ void ReadFlags(void)
   printf("val2 %x\n", (unsigned int)tosend.val2);
   printf("val3 %x\n", (unsigned int)tosend.val3);
 }
+*/
 
 
-
-void DumpMem(unsigned long addr, unsigned char* buffer, unsigned long count)
+static void DumpMem(unsigned long addr, unsigned char* buffer, unsigned long count)
 {
   unsigned int i;
   unsigned char* ptr = buffer;
@@ -280,13 +267,14 @@ void DumpMem(unsigned long addr, unsigned char* buffer, unsigned long count)
 }
 
 
-int RunCode(unsigned char* data, int count)
+static int RunCode(unsigned char* data, int count)
 {
+    unsigned short s1;
     ResetFlags();
     WriteData(0x06, data, count);      // load
     WriteData(0x02, data, 0);             // execute
 
-    unsigned short s1 = Status();
+    s1 = Status();
     if (s1 == 0x8381)
     {
       return 0;

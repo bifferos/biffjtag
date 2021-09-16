@@ -44,7 +44,7 @@ static int Help(void)
 }
 
 
-static void Error(char* err)
+static void Error(const char* err)
 {
   printf("Error: %s\n", err);
   _exit(-1);
@@ -224,7 +224,7 @@ static void ProgramBootloader(const char* fname)
 static unsigned int Manufacturer(void)
 {
   unsigned int ret = rdc_Detect();
-  char* f;
+  const char* f;
   unsigned long base = 0;
   switch (ret)
   {
@@ -261,6 +261,7 @@ int biffjtag_main(int argc, char** argv)
 #endif
 {
   unsigned long base;
+  int res;
 
   if (argc != 3)
   {
@@ -269,7 +270,7 @@ int biffjtag_main(int argc, char** argv)
     return -1;
   }
 
-  int res = rdc_init();
+  res = rdc_init();
   if (res) {
     Error("Unable to init JTAG\n");
     _exit(1);
