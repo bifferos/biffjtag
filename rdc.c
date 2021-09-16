@@ -118,8 +118,7 @@ void rdc_EonSectorErase(unsigned long addr)
 
 
 
-
-static void EonDeviceErase()
+static void EonDeviceErase(void)
 {
     unsigned long sector[] = { 0x0000, 0x4000, 0x6000, 0x8000,
            0x10000,0x20000,0x30000,0x40000,0x50000,0x60000,0x70000,0x80000,
@@ -149,7 +148,7 @@ int rdc_EonProgram(unsigned long addr, unsigned short value)
 
 
 // Read 16-bit status value
-static unsigned short Status()
+static unsigned short Status(void)
 {
   unsigned short tmp;
   jtag_write_ir(0x0f);
@@ -208,7 +207,7 @@ static void WriteData(unsigned char command, unsigned char* data, size_t data_le
 }
 
 
-void ResetFlags()
+void ResetFlags(void)
 {
   struct _bits {
     unsigned long val1;
@@ -222,7 +221,7 @@ void ResetFlags()
 }
 
 
-void ReadFlags()
+void ReadFlags(void)
 {
   struct _bits {
     unsigned long val1;
@@ -285,7 +284,7 @@ int RunCode(unsigned char* data, int count)
 }
 
 
-unsigned long rdc_eax()
+unsigned long rdc_eax(void)
 {
   unsigned long ret=0;
   ReadData32(0x0e, &ret, 4);
@@ -308,17 +307,17 @@ unsigned long rdc_eax()
 //#include "bus_control.h"
 
 
-unsigned char bus_control_bin[] = {
+static unsigned char bus_control_bin[] = {
   0x04, 0xba, 0xf8, 0x0c, 0x90, 0x08, 0x66, 0xb8, 0x40, 0x38, 0x00, 0x80,
   0x90, 0x90, 0x04, 0x66, 0xef, 0x90, 0x90, 0x04, 0xba, 0xfc, 0x0c, 0x90,
   0x08, 0x66, 0xb8, 0x00, 0x06, 0xff, 0x87, 0x90, 0x90, 0x04, 0x66, 0xef,
   0x90, 0x90
 };
-unsigned int bus_control_bin_len = 38;
+static unsigned int bus_control_bin_len = 38;
 
 
 
-int rdc_bus_control()
+int rdc_bus_control(void)
 {
   unsigned char length;
   unsigned char* ptr = bus_control_bin;

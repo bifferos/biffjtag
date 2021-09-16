@@ -10,19 +10,21 @@
 #include "rdc.h"
 
 
-int Help()
+static int Help(void)
 {
   printf("\n");
   printf("BiffJTAG.  Copyright (c) Bifferos.com 2021, bifferos@yahoo.co.uk\n");
   printf("\n");
   printf("Program to or dump from Bifferboard bootloader flash.\n");
   printf("Usage: biffjtag program SOURCE_FILE\n");
-  printf("  or:  biffjtag dump DEST_FILE\n");
+  printf("  or:  biffjtag dump DEST_FILE (dump bootloader)\n");
+  printf("  or:  biffjtag dumpconfig DEST_FILE (config block)\n");
+  printf("  or:  biffjtag mac DEST_FILE (mac address)\n");
   return 0;
 }
 
 
-void Error(char* err)
+static void Error(char* err)
 {
   printf("Error: %s\n", err);
   _exit(-1);
@@ -30,12 +32,12 @@ void Error(char* err)
 
 
 
-unsigned char buffer[0x10000];
+static unsigned char buffer[0x10000];
 
 
 
 // Dump the sector out to 'out.bin'
-void DumpBIOS(const char* fname)
+static void DumpBIOS(const char* fname)
 {  
   int fd, res;
   // Dump out the BIOS area
@@ -49,7 +51,7 @@ void DumpBIOS(const char* fname)
 
 
 // Dump the all out to 'out.bin'
-void DumpAll(unsigned long addr, const char* fname)
+static void DumpAll(unsigned long addr, const char* fname)
 {
   unsigned int count = 0;
   int max;
@@ -70,7 +72,7 @@ void DumpAll(unsigned long addr, const char* fname)
 }
 
 
-void PrintMAC(unsigned char* mac)
+static void PrintMAC(unsigned char* mac)
 {
   int i;
   for (i=0;i<6;i++)
@@ -82,7 +84,7 @@ void PrintMAC(unsigned char* mac)
 }
 
 // Dump just the MAC address part, base is the base address of flash
-void DumpMAC(unsigned long base)
+static void DumpMAC(unsigned long base)
 {  
   int fd, res;
   base += 0x4000;  // move to the config
@@ -106,7 +108,7 @@ void DumpMAC(unsigned long base)
 
 
 
-void DumpConfig(unsigned long base)
+static void DumpConfig(unsigned long base)
 {  
   int fd, res;
   base += 0x4000;  // move to the config
@@ -125,7 +127,7 @@ void DumpConfig(unsigned long base)
 
 
 
-void ProgramConfig(unsigned long base, const char* fname)
+static void ProgramConfig(unsigned long base, const char* fname)
 {
   int res, fd;
   unsigned long addr = base;
@@ -159,7 +161,7 @@ void ProgramConfig(unsigned long base, const char* fname)
 
 
 
-void EraseBootloader()
+static void EraseBootloader(void)
 {
   printf("Erasing\n");
   rdc_EonSectorErase(0xffff0000);
@@ -167,7 +169,7 @@ void EraseBootloader()
 
 
 
-void ProgramBootloader(const char* fname)
+static void ProgramBootloader(const char* fname)
 {
   int res, fd;
   unsigned long addr = 0xffff0000;
@@ -199,7 +201,7 @@ void ProgramBootloader(const char* fname)
 
 
 
-unsigned int Manufacturer()
+static unsigned int Manufacturer(void)
 {
   unsigned int ret = rdc_Detect();
   char* f;
@@ -263,17 +265,17 @@ int main(int argc, char** argv)
     
   if (strcmp(argv[1], "dump")==0) {
     DumpBIOS(argv[2]);
-//  } else if (strcmp(argv[1], "erase")==0) {
-//    EraseBootloader();
+  } else if (strcmp(argv[1], "erase")==0) {
+    EraseBootloader();
   } else if (strcmp(argv[1], "program")==0) {
     EraseBootloader();
     ProgramBootloader(argv[2]);
   } else if (strcmp(argv[1], "mac")==0) {
     DumpMAC(base);
-//  } else if (strcmp(argv[1], "dumpconfig")==0) {
-//    DumpConfig(base);
-//  } else if (strcmp(argv[1], "programconfig")==0) {
-//    ProgramConfig(base,"config.bin");
+  } else if (strcmp(argv[1], "dumpconfig")==0) {
+    DumpConfig(base);
+  } else if (strcmp(argv[1], "programconfig")==0) {
+    ProgramConfig(base,"config.bin");
   } else if (strcmp(argv[1], "dumpall")==0) {
     DumpAll(base, argv[2]);
   } else {
