@@ -2,6 +2,8 @@
 .PHONY: clean release
 
 
+# CROSS_PATH:=/opt/buildroot-2011.11/output/host/usr/bin
+
 CROSS_PATH:=/home/biff/buildroot-2011.11/output/host/usr/bin
 PREFIX:=i486-unknown-linux-uclibc-
 
@@ -11,7 +13,7 @@ RELEASE=release/
 
 all: biffjtag
 
-CC = $(PREFIX)gcc -c -Wall -static 
+CC = $(PREFIX)gcc -c -Wall -static -O2
 AS = $(PREFIX)as
 LINK = $(PREFIX)gcc -Wall -static
 OBJS = jtag.o biffjtag.o rdc.o

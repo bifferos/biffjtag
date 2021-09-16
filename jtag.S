@@ -209,6 +209,8 @@ BIT_TDO = (1<<BIT_TDO_POS)
 
 .global jtag_init
 jtag_init:
+    push %edx
+    push %ebx
     movw $PORT, %dx
     any_to_reset         # Put into test-logic reset from wherever it is now.
 
@@ -244,6 +246,9 @@ jtag_init.loop:
     test $0xffff, %ebx
     jz jtag_init.cont
     movl %ebx, %eax
+
+    pop %ebx
+    pop %edx
     ret
 jtag_init.cont:
     idle_to_reset
@@ -268,23 +273,30 @@ jtag_init.cont:
 # Arg2 code
 .global jtag_MemAccess
 jtag_MemAccess:
+        push %edx
+        push %ebx
 	movw $PORT, %dx
-	MemAccess_impl 4(%esp),  8(%esp)
-
+	MemAccess_impl 12(%esp),  16(%esp)
+        pop %ebx
+        pop %edx
 	ret
 
 
 # Arg 1 addr
 .global jtag_ReadMem16
 jtag_ReadMem16:
+        push %edx
+        push %ebx
 	movw $PORT, %dx
-	MemAccess_impl 4(%esp), $0x19
+	MemAccess_impl 12(%esp), $0x19
 
 	update_to_shift_dr
 	read_dr 16
 	movl %eax, %ebx
 	update_to_idle
 	movl %ebx, %eax
+        pop %ebx
+        pop %edx
 	ret
 
 
@@ -292,61 +304,97 @@ jtag_ReadMem16:
 # Arg 2 val
 .global jtag_WriteMem16
 jtag_WriteMem16:
+        push %edx
+        push %ebx
 	mov $PORT, %dx
-	MemAccess_impl 4(%esp), $0x1d
+	MemAccess_impl 12(%esp), $0x1d
 
 	update_to_shift_dr
-	movl 8(%esp), %ebx
+	movl 16(%esp), %ebx
 	write_dr16
 	update_to_idle
+        pop %ebx
+        pop %edx
 	ret
 
 
 # Arg 1 val
 .global jtag_write_ir
 jtag_write_ir:
-	write_ir 4(%esp)
+        push %edx
+        push %ebx
+	write_ir 12(%esp)
 #	delay 400
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_idle_to_shift_dr
 jtag_idle_to_shift_dr:
+        push %edx
+        push %ebx
 	idle_to_shift_dr
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_read_dr8
 jtag_read_dr8:
+        push %edx
+        push %ebx
 #	delay 400
 	read_dr 8
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_read_dr16
 jtag_read_dr16:
+        push %edx
+        push %ebx
 #        delay 200
 	read_dr 16
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_read_dr32
 jtag_read_dr32:
+        push %edx
+        push %ebx
 #	delay 400
 	read_dr 32
 #	delay 400
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_update_to_idle
 jtag_update_to_idle:
+        push %edx
+        push %ebx
 	update_to_idle
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_update_to_shift_dr
 jtag_update_to_shift_dr:
+        push %edx
+        push %ebx
 	update_to_shift_dr
+        pop %ebx
+        pop %edx
 	ret
 
 .global jtag_write_dr32
 jtag_write_dr32:
-	movl 4(%esp), %ebx
+        push %edx
+        push %ebx
+	movl 12(%esp), %ebx
 	write_dr32
+        pop %ebx
+        pop %edx
 	ret
 
 
